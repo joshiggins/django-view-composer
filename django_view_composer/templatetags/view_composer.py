@@ -21,7 +21,7 @@ def parse_view_tag(parser, token):
 @register.tag
 def view(parser, token):
     view_name = parse_view_tag(parser, token)
-    return ViewNode(None, view_name)
+    return ViewNode(view_name)
 
 
 @register.tag
@@ -29,7 +29,7 @@ def viewblock(parser, token):
     view_name = parse_view_tag(parser, token)
     nodelist = parser.parse(("endviewblock",))
     parser.delete_first_token()
-    return ViewNode(nodelist, view_name)
+    return ViewNode(view_name, nodelist)
 
 
 class ViewNode(template.Node):
