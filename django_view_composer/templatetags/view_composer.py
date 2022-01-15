@@ -86,10 +86,10 @@ class ViewNode(template.Node):
         # render the view to a response
         instance = view_class(request=request, extra_context=child_context)
 
-        # if the view class has as_view method use that, otherwise
-        # default to get
-        if hasattr(instance, "as_view"):
-            response = instance.as_view(request)
+        # if the view class has a compose method use that, otherwise
+        # default to get method
+        if hasattr(instance, "compose"):
+            response = instance.compose(request)
         else:
             response = instance.get(request)
 
