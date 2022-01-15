@@ -21,3 +21,7 @@ class BasicFunctionalityView(TemplateView):
         context["test_view_str"] = "example.views.TestView"
         context["child_color"] = "blue"
         return context
+
+
+class BlockTagView(TemplateView):
+    template_name = "example/block.html"

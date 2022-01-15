@@ -1,0 +1,39 @@
+{% load view_composer %}
+
+<h1>Block tag</h1>
+
+<p>This page tests the block tag. The block tag renders any child nodes first and provides them to the view in the <code>children</code> context variable.</p>
+
+{% view 'example.views.Navigation' %}
+
+<hr />
+
+<p>Include view block with a child node</p>
+
+<pre>
+{% verbatim %}{% viewblock 'example.views.TestView' %}{% endverbatim %}
+{% filter force_escape %}
+<div>Hello!</div>
+{% endfilter %}
+{% verbatim %}{% endviewblock %}{% endverbatim %}
+</pre>
+
+
+{% viewblock 'example.views.TestView' %}
+    <div>Hello!</div>
+{% endviewblock %}
+
+<p>Include view block with a child node and a variable</p>
+
+<pre>
+{% verbatim %}{% viewblock 'example.views.TestView' with color='green' %}{% endverbatim %}
+{% filter force_escape %}
+<div>Hello!</div>
+{% endfilter %}
+{% verbatim %}{% endviewblock %}{% endverbatim %}
+</pre>
+
+
+{% viewblock 'example.views.TestView' with color='green' %}
+    <div>Hello!</div>
+{% endviewblock %}
