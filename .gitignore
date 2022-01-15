@@ -1,3 +1,5 @@
+db.sqlite3
+
 # from https://github.com/django/django
 
 *.egg-info
