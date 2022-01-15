@@ -14,7 +14,7 @@ def parse_view_tag(parser, token):
     tag_name, *bits = token.split_contents()
     if len(bits) == 0:
         raise template.TemplateSyntaxError(
-            "%r tag requires a single argument" % token.contents.split()[0]
+            "%r tag requires at least 1 argument (the view import string)" % tag_name
         )
 
     # parse view name
