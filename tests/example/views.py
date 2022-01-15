@@ -18,5 +18,6 @@ class BasicFunctionalityView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["test_view_str"] = 'example.views.TestView'
+        context["test_view_str"] = "example.views.TestView"
+        context["child_color"] = "blue"
         return context

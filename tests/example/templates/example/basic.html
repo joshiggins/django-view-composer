@@ -39,3 +39,11 @@
 </pre>
 
 {% view test_view_str with color="red" only %}
+
+<p>Include view with additional context variables resolved from parent view context</p>
+
+<pre>
+{% verbatim %} {% view test_view_str with color=child_color %} {% endverbatim %}
+</pre>
+
+{% view test_view_str with color=child_color %}
