@@ -11,13 +11,14 @@
 <p>Include view block with a child node</p>
 
 <pre>
-{% verbatim %}{% viewblock 'example.views.TestView' %}{% endverbatim %}
 {% filter force_escape %}
-<div>Hello!</div>
+{% verbatim %}
+{% viewblock 'example.views.TestView' %}
+    <div>Hello!</div>
+{% endviewblock %}
+{% endverbatim %}
 {% endfilter %}
-{% verbatim %}{% endviewblock %}{% endverbatim %}
 </pre>
-
 
 {% viewblock 'example.views.TestView' %}
     <div>Hello!</div>
@@ -26,14 +27,55 @@
 <p>Include view block with a child node and a variable</p>
 
 <pre>
-{% verbatim %}{% viewblock 'example.views.TestView' with color='green' %}{% endverbatim %}
 {% filter force_escape %}
+{% verbatim %}
+{% viewblock 'example.views.TestView' with color='green' %}
 <div>Hello!</div>
+{% endviewblock %}
+{% endverbatim %}
 {% endfilter %}
-{% verbatim %}{% endviewblock %}{% endverbatim %}
 </pre>
-
 
 {% viewblock 'example.views.TestView' with color='green' %}
     <div>Hello!</div>
+{% endviewblock %}
+
+<p>Include view block with another view as a child node</p>
+
+<pre>
+{% filter force_escape %}
+{% verbatim %}
+{% viewblock 'example.views.TestView' with color='green' %}
+    {% view 'example.views.TestView' %}
+{% endviewblock %}
+{% endverbatim %}
+{% endfilter %}
+</pre>
+
+{% viewblock 'example.views.TestView' with color='green' %}
+    {% view 'example.views.TestView' %}
+{% endviewblock %}
+
+<p>Nesting multiple blocks</p>
+
+<pre>
+{% filter force_escape %}
+{% verbatim %}
+{% viewblock 'example.views.TestView' with color='green' %}
+    {% viewblock 'example.views.TestView' with color='orange' %}
+        {% viewblock 'example.views.TestView' with color='red' %}
+            <p>Hello, {{ user }}</p>
+        {% endviewblock %}
+    {% endviewblock %}
+{% endviewblock %}
+{% endverbatim %}
+{% endfilter %}
+</pre>
+
+{% viewblock 'example.views.TestView' with color='green' %}
+    {% viewblock 'example.views.TestView' with color='orange' %}
+        {% viewblock 'example.views.TestView' with color='red' %}
+            <p>Hello, {{ user }}</p>
+        {% endviewblock %}
+    {% endviewblock %}
 {% endviewblock %}
