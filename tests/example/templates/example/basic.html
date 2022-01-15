@@ -1,0 +1,25 @@
+{% load view_composer %}
+
+<h1>Basic functionality</h1>
+
+<p>This page tests the different template tag arguments, and shows the context variables available in each view context as it renders.</p>
+
+{% view 'example.views.Navigation' %}
+
+<hr />
+
+<p>Include view using import string</p>
+
+{% view 'example.views.TestView' %}
+
+<p>Include view using import string in a context variable</p>
+
+{% view test_view_str %}
+
+<p>Include view with variables</p>
+
+{% view test_view_str with color="red" %}
+
+<p>Include view with *only* variables</p>
+
+{% view test_view_str with color="red" only %}

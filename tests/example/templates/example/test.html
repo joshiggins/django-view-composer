@@ -1,0 +1,6 @@
+<div style="border: 1px solid; {% if color %}color: {{ color }};{% endif %}">
+    {{ view }}
+    <pre style="white-space: pre-wrap;">
+        {{ view.get_context_data }}
+    </pre>
+</div>
