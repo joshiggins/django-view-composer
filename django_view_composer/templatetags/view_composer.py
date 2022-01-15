@@ -1,63 +1,99 @@
 from django import template
+from django.template.base import token_kwargs
 from django.utils.module_loading import import_string
+import itertools
 
 register = template.Library()
 
 
 def parse_view_tag(parser, token):
-    try:
-        tag_name, view_name = token.split_contents()
-    except ValueError:
+    # dict to hold parsed options from the tag
+    options = {}
+
+    # split and check args
+    tag_name, *bits = token.split_contents()
+    if len(bits) == 0:
         raise template.TemplateSyntaxError(
             "%r tag requires a single argument" % token.contents.split()[0]
         )
-    if not (view_name[0] == view_name[-1] and view_name[0] in ('"', "'")):
-        raise template.TemplateSyntaxError(
-            "%r tag's argument should be in quotes" % tag_name
-        )
-    return view_name[1:-1]
+
+    # parse view name
+    view_name = bits[0]
+    if view_name[0] == view_name[-1] and view_name[0] in ('"', "'"):
+        # name is an import string
+        options["view"] = import_string(view_name[1:-1])
+    else:
+        # resolve the view from context
+        options["resolve_view"] = view_name
+
+    # parse the with variables
+    arg_group = [list(g) for _, g in itertools.groupby(bits, "with".__ne__)]
+    if len(arg_group) == 3:
+        options["vars"] = token_kwargs(arg_group[2], parser)
+
+    return options
 
 
 @register.tag
 def view(parser, token):
-    view_name = parse_view_tag(parser, token)
-    return ViewNode(view_name)
+    options = parse_view_tag(parser, token)
+    return ViewNode(options)
 
 
 @register.tag
 def viewblock(parser, token):
-    view_name = parse_view_tag(parser, token)
+    options = parse_view_tag(parser, token)
     nodelist = parser.parse(("endviewblock",))
     parser.delete_first_token()
-    return ViewNode(view_name, nodelist)
+    return ViewNode(options, nodelist)
 
 
 class ViewNode(template.Node):
-    def __init__(self, view_name, nodelist=None):
+    def __init__(self, options, nodelist=None):
+        self.options = options
         self.nodelist = nodelist
-        self.view_class = import_string(view_name)
-        self.view_name = view_name
-        self.request = template.Variable("request")
 
     def render(self, context):
-        # the child view gets our context variables
-        child_context = context.flatten()
-        del child_context["view"]
-        # render any nodes in the block first
+        # get the view from template tag options
+        if "resolve_view" in self.options:
+            # view needs to be resolved from the template context
+            resolved = template.Variable(self.options["resolve_view"]).resolve(context)
+            view_class = import_string(resolved)
+        else:
+            view_class = self.options["view"]
+
+        # get the request object
+        request = template.Variable("request").resolve(context)
+
+        # this child view gets our context variables unless the template
+        # tag specifies "with ..."
+        child_context = {}
+        if "vars" in self.options:
+            for k in self.options["vars"]:
+                child_context[k] = self.options["vars"][k].resolve(context)
+        else:
+            child_context = context.flatten()
+            del child_context["view"]
+
+        # render any nodes in the block first and add these to the child
+        # view context
         if self.nodelist:
             child_context["children"] = self.nodelist.render(context)
-        # render it to a response
-        request = self.request.resolve(context)
-        instance = self.view_class(request=request, extra_context=child_context)
+
+        # render the view to a response
+        instance = view_class(request=request, extra_context=child_context)
+
         # if the view class has as_view method use that, otherwise
         # default to get
         if hasattr(instance, "as_view"):
             response = instance.as_view(request)
         else:
             response = instance.get(request)
+
         # only render if there is something to render
         if hasattr(response, "render"):
             response.render()
             return response.content.decode()
+
         # any other response
         return ""
