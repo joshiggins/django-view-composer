@@ -29,6 +29,9 @@ def parse_view_tag(parser, token):
     # parse the with variables
     arg_group = [list(g) for _, g in itertools.groupby(bits, "with".__ne__)]
     if len(arg_group) == 3:
+        if arg_group[2][-1] == "only":
+            arg_group[2].pop()
+            options["no_parent_ctx"] = True
         options["vars"] = token_kwargs(arg_group[2], parser)
 
     return options
@@ -68,12 +71,12 @@ class ViewNode(template.Node):
         # this child view gets our context variables unless the template
         # tag specifies "with ..."
         child_context = {}
+        if not "no_parent_ctx" in self.options:
+            child_context = context.flatten()
+            del child_context["view"]
         if "vars" in self.options:
             for k in self.options["vars"]:
                 child_context[k] = self.options["vars"][k].resolve(context)
-        else:
-            child_context = context.flatten()
-            del child_context["view"]
 
         # render any nodes in the block first and add these to the child
         # view context
