@@ -1,0 +1,15 @@
+<div class="pf-c-backdrop" x-cloak x-show="{{ open }}">
+  <div class="pf-l-bullseye">
+    <div class="pf-c-modal-box pf-m-sm" aria-modal="true">
+      <button class="pf-c-button pf-m-plain" type="button" aria-label="Close" @click="{{ open }} = false">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+      <header class="pf-c-modal-box__header">
+        <h1 class="pf-c-modal-box__title">{{ title }}</h1>
+      </header>
+      <div class="pf-c-modal-box__body">
+          {{ children }}
+      </div>
+    </div>
+  </div>
+</div>

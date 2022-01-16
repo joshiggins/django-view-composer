@@ -1,0 +1,84 @@
+{% extends 'kitchensink/nav.html' %}
+{% load view_composer %}
+
+{% block main %}
+<section class="pf-c-page__main-section pf-m-limit-width pf-m-light pf-m-shadow-bottom">
+  <div class="pf-c-page__main-body">
+    <div class="pf-c-content">
+      <h1>CreateView in a modal</h1>
+      <p>This demonstrates including a CreateView into the template of a ListView, but inside a modal popup instead.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pf-c-page__main-section">
+        <div class="pf-c-card" id="card-basic-example">
+            <div class="pf-c-card__title">How this works</div>
+            <div class="pf-c-card__body">
+                <p>
+                    The modal popup itself is a reusable component made out of a TemplateView
+                    and included with the viewblock template tag - have a look in views.py and 
+                    the associated modal.html template.
+                    We use Alpine.js to make it interactive.
+                    The modal view expects you to pass in the name of the x-data variable that c
+                    ontrols if the modal is open or not.
+                </p>
+                <pre>
+{% filter force_escape %}
+{% verbatim %}
+<div x-data="{ create_open: false }">
+    {% viewblock 'kitchensink.views.Modal' with title="Modal title" open="create_open" %}
+        ...the modal content...
+    {% endviewblock %}
+    
+    <button @click="create_open = true">Open modal</button>
+</div>
+{% endverbatim %}
+{% endfilter %}
+                </pre>
+                <p>Inside the template for the modal, it looks like</p>
+                <pre>
+{% filter force_escape %}
+{% verbatim %}
+<div class="modal-wrapper" x-cloak x-show="{{ open }}">
+    <header>{{ title }}</header>
+    {{ children }}
+</div>
+{% endverbatim %}
+{% endfilter %}
+                </pre>
+            </div>
+          </div>
+  </section>
+
+<section class="pf-c-page__main-section pf-m-limit-width">
+  <div class="pf-c-page__main-body">
+
+    <div x-data="{ create_open: false }">
+        {% viewblock 'kitchensink.views.Modal' with title="Create a new person" open="create_open" %}
+            {% view 'kitchensink.views.PersonCreateView' %}
+        {% endviewblock %}
+        <button @click="create_open = true" class="pf-c-button pf-m-primary">Create person</button>
+    </div>
+    
+    <table class="pf-c-table pf-m-grid-md pf-m-sticky-header">
+      <thead>
+        <tr role="row">
+          <th role="columnheader" scope="col">First name</th>
+          <th role="columnheader" scope="col">Last name</th>
+        </tr>
+      </thead>
+
+      <tbody role="rowgroup">
+        {% for object in object_list %}
+        <tr role="row">
+          <td role="cell" data-label="First name">{{ object.first_name }}</td>
+          <td role="cell" data-label="Last name">{{ object.last_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% endblock %}

@@ -18,3 +18,12 @@ class PersonCreateView(CreateView):
     model = Person
     fields = ["first_name", "last_name"]
     success_url = reverse_lazy("kitchensink:person-list")
+
+
+class Modal(TemplateView):
+    template_name = "kitchensink/modal.html"
+
+
+class PersonListViewWithModal(ListView):
+    model = Person
+    template_name = "kitchensink/person_list_modal.html"
