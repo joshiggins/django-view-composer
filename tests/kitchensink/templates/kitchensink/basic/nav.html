@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="pf-c-page__sidebar">
+  <div class="pf-c-page__sidebar-body">
+    <nav class="pf-c-nav">
+      <section class="pf-c-nav__section">
+        <h2 class="pf-c-nav__section-title">Template tag usage</h2>
+        <ul class="pf-c-nav__list">
+          <li class="pf-c-nav__item">
+            <a href="#" class="pf-c-nav__link">Simple</a>
+          </li>
+          <li class="pf-c-nav__item">
+            <a href="#" class="pf-c-nav__link">Nested views</a>
+          </li>
+          <li class="pf-c-nav__item">
+            <a href="#" class="pf-c-nav__link">Context</a>
+          </li>
+        </ul>
+      </section>
+      <section class="pf-c-nav__section">
+        <h2 class="pf-c-nav__section-title">Patterns</h2>
+        <ul class="pf-c-nav__list">
+          <li class="pf-c-nav__item">
+            <a href="#" class="pf-c-nav__link">CreateView and ListView</a>
+          </li>
+        </ul>
+      </section>
+    </nav>
+  </div>
+</div>
+<main class="pf-c-page__main" tabindex="-1">
+  {% block main %} {% endblock %}
+</main>
+{% endblock %}

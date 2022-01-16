@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>The Kitchen Sink</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@patternfly/patternfly@4.164.2/patternfly.css"
+    />
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.8.0/dist/cdn.min.js"
+    ></script>
+  </head>
+
+  <body>
+    <div class="pf-c-page">
+      <header class="pf-c-page__header">
+        <header class="pf-c-masthead">
+          <div class="pf-c-masthead__main">
+            <a class="pf-c-masthead__brand" href="#"> The Kitchen Sink</a>
+          </div>
+          <div class="pf-c-masthead__content">Basic</div>
+        </header>
+      </header>
+      {% block content %} {% endblock %}
+    </div>
+  </body>
+</html>
