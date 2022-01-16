@@ -1,0 +1,38 @@
+{% extends 'kitchensink/nav.html' %}
+{% load view_composer %}
+
+{% block main %}
+<section class="pf-c-page__main-section pf-m-limit-width pf-m-light pf-m-shadow-bottom">
+  <div class="pf-c-page__main-body">
+    <div class="pf-c-content">
+      <h1>CreateView and ListView</h1>
+      <p>This demonstrates including a CreateView into the template of a ListView</p>
+    </div>
+  </div>
+</section>
+
+<section class="pf-c-page__main-section pf-m-limit-width">
+  <div class="pf-c-page__main-body">
+
+    {% view 'kitchensink.views.PersonCreateView' %}
+    
+    <table class="pf-c-table pf-m-grid-md pf-m-sticky-header">
+      <thead>
+        <tr role="row">
+          <th role="columnheader" scope="col">First name</th>
+          <th role="columnheader" scope="col">Last name</th>
+        </tr>
+      </thead>
+
+      <tbody role="rowgroup">
+        {% for object in object_list %}
+        <tr role="row">
+          <td role="cell" data-label="First name">{{ object.first_name }}</td>
+          <td role="cell" data-label="Last name">{{ object.last_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
