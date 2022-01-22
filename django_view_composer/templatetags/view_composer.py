@@ -73,7 +73,8 @@ class ViewNode(template.Node):
         child_context = {}
         if not "no_parent_ctx" in self.options:
             child_context = context.flatten()
-            del child_context["view"]
+            if "view" in child_context:
+                del child_context["view"]
         if "vars" in self.options:
             for k in self.options["vars"]:
                 child_context[k] = self.options["vars"][k].resolve(context)
