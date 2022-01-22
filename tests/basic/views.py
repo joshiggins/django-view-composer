@@ -12,3 +12,7 @@ class ContextTestView(TemplateView):
     def get_context_json(self):
         context = self.get_context_data()
         return jsonpickle.encode(context)
+
+
+class BlockTestView(TemplateView):
+    template_name = "basic/block.html"

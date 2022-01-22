@@ -72,3 +72,29 @@ class ViewTagTestCase(TestCase):
         )
         test_ctx = jsonpickle.decode(res)
         self.assertEqual(test_ctx["food"], "eggs")
+
+    def test_block_view(self):
+        res = self.get_with_context(
+            "{% load view_composer %}"
+            "{% viewblock 'basic.views.BlockTestView' %}"
+            "   {% view 'basic.views.ContextTestView' %}"
+            "{% endviewblock %}",
+            {"food": "spam"},
+        )
+        test_ctx = jsonpickle.decode(res)
+        self.assertEqual(test_ctx["food"], "spam")
+
+    def test_nested_block_views(self):
+        res = self.get_with_context(
+            "{% load view_composer %}"
+            "{% viewblock 'basic.views.BlockTestView' %}"
+            "   {% viewblock 'basic.views.BlockTestView' %}"
+            "       {% viewblock 'basic.views.BlockTestView' %}"
+            "           {% view 'basic.views.ContextTestView' %}"
+            "       {% endviewblock %}"
+            "   {% endviewblock %}"
+            "{% endviewblock %}",
+            {"food": "spam"},
+        )
+        test_ctx = jsonpickle.decode(res)
+        self.assertEqual(test_ctx["food"], "spam")
