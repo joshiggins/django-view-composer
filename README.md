@@ -23,19 +23,19 @@ Extending the Django template system so that you can include a view inside anoth
 
 Django View Composer is released on PyPi so you can install using Pip:
 
-```
+```sh
 pip install django-view-composer
 ```
 
 or Poetry:
 
-```
+```sh
 poetry install django-view-composer
 ```
 
 Once installed, add to your `INSTALLED_APPS` setting to register the template tags:
 
-```
+```python
 INSTALLED_APPS = [
     ...
     "django_view_composer",
@@ -49,7 +49,7 @@ The `{% view %}` tag renders a class based view and includes the content in the 
 
 It has 1 required argument which is the import string for the view:
 
-```
+```html+django
 {% load view_composer %}
 
 {% view 'myapp.views.MyView' %}
@@ -57,7 +57,7 @@ It has 1 required argument which is the import string for the view:
 
 You can also provide a variable for the import string which will be resolved from the current template's context:
 
-```
+```html+django
 {% view view_to_render %}
 ```
 
@@ -71,13 +71,13 @@ If any context variable names conflict, whatever the child view sets in it's own
 
 You can pass additional context from the template tag:
 
-```
+```html+django
 {% view 'myapp.views.MyView' with foo='bar' %}
 ```
 
 Additional variables can be resolved from the current template's context to pass to the included view:
 
-```
+```html+django
 {% view 'myapp.views.MyView' with foo=foo %}
 ```
 
@@ -85,7 +85,7 @@ Additional variables can be resolved from the current template's context to pass
 
 If you want to render the included view only with the variables provided (or even no variables at all), use the only option. No other variables will be provided to the included view.
 
-```
+```html+django
 {% view 'myapp.views.MyView' with foo='bar' only %}
 ```
 
@@ -95,7 +95,7 @@ The `{% viewblock %}` tag renders a class based view and includes the content in
 
 This tag must be closed with a corresponding endviewblock. It has 1 required argument which is the import string for the view:
 
-```
+```html+django
 {% load view_composer %}
 
 {% viewblock 'myapp.views.MyView' %}
@@ -105,7 +105,7 @@ This tag must be closed with a corresponding endviewblock. It has 1 required arg
 
 In the template for the `myapp.views.MyView`, you can use the children context variable to decide where to render the block content:
 
-```
+```html+django
 <div>
     {{ children }}
 </div>
@@ -140,7 +140,7 @@ If you need to handle a different method in an included view, such as a child vi
 
 Using the form as an example:
 
-```
+```python
 from .views import ItemCreateView
 
 app_name = "myapp"
@@ -149,7 +149,7 @@ url_patterns = [
 ]
 ```
 
-```
+```html+django
 <form method="post" action="{% url 'myapp:item-create-view' %}">
     ...
 </form>
