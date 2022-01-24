@@ -7,7 +7,7 @@ Extending the Django template system so that you can include a view inside anoth
 - **Lightweight** - no framework, no core Javascript and no additional Python dependencies
 - **Reactive, if you want** - integrates nicely with HTMX
 
-```
+```html+django
 {% load view_composer %}
 
 <nav>
