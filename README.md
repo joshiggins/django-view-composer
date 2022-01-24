@@ -176,3 +176,18 @@ This provides a foundation for reactivity when coupled with [HTMX](https://htmx.
 
 Remember, the view composer is not a framework - its just a template tag that lets you render a view inside another view.
 It does not fundamentally change the Django request lifecycle even if you choose to include some reactivity with HTMX.
+
+## Running tests
+
+There is a growing test suite which can be run 
+
+```
+$ poetry install
+$ poetry shell
+$ cd tests
+$ ./manage.py test
+```
+
+## Contributing
+
+Welcome!
