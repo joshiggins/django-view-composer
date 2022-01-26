@@ -1,8 +1,15 @@
 [tool.poetry]
 name = "django_view_composer"
-version = "0.1.0"
-description = ""
-authors = ["Josh Higgins <5124298+joshiggins@users.noreply.github.com>"]
+version = "0.2.0"
+description = "Django template tags to include views inside other views"
+authors = ["Josh Higgins <josh@joshh.info>"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/joshiggins/django-view-composer"
+repository = "https://github.com/joshiggins/django-view-composer"
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
