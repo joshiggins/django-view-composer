@@ -89,6 +89,30 @@ If you want to render the included view only with the variables provided (or eve
 {% view 'myapp.views.MyView' with foo='bar' only %}
 ```
 
+### View keyword arguments
+
+If your view requires kwargs in the URL, such as a pattern like
+
+```python
+url_patterns = [
+    path("item/<pk:pk>/edit", ItemEditView.as_view(), name="item-edit-view"),
+]
+```
+
+you can supply these in the template tag directly after the import string and before the `with` keyword:
+
+```html+django
+{% view 'myapp.views.ItemEditView' pk=pk with extra_food="spam" %}
+```
+
+or without any extra context variables:
+
+```html+django
+{% view 'myapp.views.ItemEditView' pk=pk %}
+```
+
+> These kwargs are the ones passed to the view's `setup()`, not to the `__init__` method
+
 ## Using the `viewblock` tag
 
 The `{% viewblock %}` tag renders a class based view and includes the content in the current template, but provides a block for additional nodes which are rendered first and made available in the included view’s context.

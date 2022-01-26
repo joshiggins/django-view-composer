@@ -98,3 +98,24 @@ class ViewTagTestCase(TestCase):
         )
         test_ctx = jsonpickle.decode(res)
         self.assertEqual(test_ctx["food"], "spam")
+
+    def test_view_kwargs(self):
+        res = self.get_with_context(
+            "{% load view_composer %}"
+            "{% view 'basic.views.KwargsTestView' food='spam' with ham='eggs' %}",
+            {},
+        )
+        test_ctx = jsonpickle.decode(res)
+        self.assertEqual(test_ctx["food_kwarg"], "spam")
+        self.assertEqual(test_ctx["ham"], "eggs")
+
+    def test_viewblock_kwargs(self):
+        res = self.get_with_context(
+            "{% load view_composer %}"
+            "{% viewblock 'basic.views.KwargsTestView' food='spam' with ham='eggs' %}"
+            "{% endviewblock %}",
+            {},
+        )
+        test_ctx = jsonpickle.decode(res)
+        self.assertEqual(test_ctx["food_kwarg"], "spam")
+        self.assertEqual(test_ctx["ham"], "eggs")

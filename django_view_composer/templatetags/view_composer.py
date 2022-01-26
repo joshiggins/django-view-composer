@@ -34,6 +34,11 @@ def parse_view_tag(parser, token):
             options["no_parent_ctx"] = True
         options["vars"] = token_kwargs(arg_group[2], parser)
 
+    # kwargs for the view should preceed the 'with' bit
+    arg_group[0].pop(0)
+    if len(arg_group[0]) > 0:
+        options["kwargs"] = token_kwargs(arg_group[0], parser)
+
     return options
 
 
@@ -79,6 +84,12 @@ class ViewNode(template.Node):
             for k in self.options["vars"]:
                 child_context[k] = self.options["vars"][k].resolve(context)
 
+        # resolve the kwargs
+        resolved_kwargs = {}
+        if "kwargs" in self.options:
+            for k in self.options["kwargs"]:
+                resolved_kwargs[k] = self.options["kwargs"][k].resolve(context)
+
         # render any nodes in the block first and add these to the child
         # view context
         if self.nodelist:
@@ -87,12 +98,15 @@ class ViewNode(template.Node):
         # render the view to a response
         instance = view_class(request=request, extra_context=child_context)
 
+        # call setup on the view
+        instance.setup(request, **resolved_kwargs)
+
         # if the view class has a compose method use that, otherwise
         # default to get method
         if hasattr(instance, "compose"):
-            response = instance.compose(request)
+            response = instance.compose(request, **resolved_kwargs)
         else:
-            response = instance.get(request)
+            response = instance.get(request, **resolved_kwargs)
 
         # only render if there is something to render
         if hasattr(response, "render"):
