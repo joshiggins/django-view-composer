@@ -65,8 +65,12 @@ class ViewNode(template.Node):
         # get the view from template tag options
         if "resolve_view" in self.options:
             # view needs to be resolved from the template context
-            resolved = template.Variable(self.options["resolve_view"]).resolve(context)
-            view_class = import_string(resolved)
+            try:
+                resolved = template.Variable(self.options["resolve_view"]).resolve(context)
+                view_class = import_string(resolved)
+            except:
+                # finally try and import without string, e.g., unquoted module name
+                view_class = import_string(self.options["resolve_view"])
         else:
             view_class = self.options["view"]
 

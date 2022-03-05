@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django_view_composer"
-version = "0.2.0"
+version = "0.2.1"
 description = "Django template tags to include views inside other views"
 authors = ["Josh Higgins <josh@joshh.info>"]
 readme = "README.md"
